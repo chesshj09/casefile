@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CASE FILE</title>
+</head>
+<body>
+<!--
+  ✔ 티스토리에 넣을 때: <body> 안의 내용 전부(link ~ script)를 HTML 모드에 붙여넣기
+  ✔ 읽기 전용으로 공개하려면 맨 아래 script의 EDIT_UI 를 false 로 바꾸세요
+-->
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&family=Nanum+Gothic+Coding:wght@400;700&display=swap" rel="stylesheet">
+<style>
+.cf-wrap{
+  --ink:#3a2e25; --ink-soft:rgba(58,46,37,.55); --line:rgba(58,46,37,.38);
+  --paper:#e7d6b4; --paper-dark:#d8c398; --red:#a3322a;
+  --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .24  0 0 0 0 .13  0 0 0 .3 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  --stain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='500' height='700' preserveAspectRatio='none'><filter id='s' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='.011' numOctaves='4' seed='11'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .28  0 0 0 0 .1  1.7 0 0 0 -.62'/></filter><rect width='100%' height='100%' filter='url(%23s)'/></svg>");
+  --fiber:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='.03 .75' numOctaves='2' seed='4' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .32  0 0 0 0 .21  0 0 0 0 .1  1.5 0 0 0 -.6'/></filter><rect width='100%' height='100%' filter='url(%23f)'/></svg>");
+  position:relative; max-width:440px; margin:30px auto; padding:0 0 0 6px;
+  font-family:'Courier Prime','Nanum Gothic Coding',monospace; color:var(--ink);
+  line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+.cf-wrap *{box-sizing:border-box}
+.cf-wrap ul{list-style:none;margin:0;padding:0}
+
+/* ===== 폴더 본체 ===== */
+.cf-stage{position:relative;padding-right:40px}
+.cf-back{
+  position:absolute;left:0;right:40px;top:10px;bottom:8px;border-radius:6px;border:1px solid #8f7a52;
+  background:
+    radial-gradient(ellipse at 90% 90%, rgba(110,70,25,.35), transparent 50%),
+    var(--stain), var(--grain), #d3bd8f;
+  background-size:auto,100% 100%,auto,auto;
+  box-shadow:0 2px 6px rgba(0,0,0,.3), inset 0 0 30px rgba(100,65,25,.15)}
+.cf-back.b1{transform:rotate(-1.3deg) translate(-4px,2px)}
+.cf-back.b2{transform:rotate(1deg) translate(4px,3px);filter:brightness(.93)}
+.cf-card{
+  position:relative; z-index:2; min-height:660px; padding:38px 26px 26px; border-radius:6px;
+  border:1px solid #8f7a52;
+  background:
+    radial-gradient(ellipse at 14% 6%, rgba(160,110,45,.18), transparent 40%),
+    radial-gradient(ellipse at 95% 98%, rgba(120,75,25,.22), transparent 46%),
+    radial-gradient(ellipse at 78% 22%, rgba(255,243,205,.3), transparent 42%),
+    var(--grain),
+    var(--paper);
+  box-shadow:0 8px 22px rgba(60,40,15,.45), inset 0 0 60px rgba(105,66,22,.2), inset 0 0 12px rgba(70,40,10,.15);
+}
+/* 바랜 종이 오버레이: 얼룩 · 섬유결 · 갈색 반점(foxing) · 접힌 자국 */
+.cf-card::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:6;
+  mix-blend-mode:multiply;opacity:.28;
+  background:
+    linear-gradient(to bottom, transparent calc(47% - 2px), rgba(80,50,20,.2) 47%, rgba(255,246,222,.4) calc(47% + 1.5px), transparent calc(47% + 5px)),
+    linear-gradient(to right, transparent 63%, rgba(80,50,20,.1) 63.4%, rgba(255,246,222,.18) 63.9%, transparent 64.6%),
+    radial-gradient(circle at 17% 71%, rgba(120,70,22,.38) 0, rgba(120,70,22,.14) 2px, transparent 4.5px),
+    radial-gradient(circle at 73% 30%, rgba(120,70,22,.32) 0, rgba(120,70,22,.12) 3px, transparent 6px),
+    radial-gradient(circle at 42% 90%, rgba(120,70,22,.3) 0, rgba(120,70,22,.1) 2px, transparent 4px),
+    radial-gradient(circle at 89% 63%, rgba(120,70,22,.34) 0, rgba(120,70,22,.12) 2px, transparent 5px),
+    radial-gradient(circle at 8% 38%, rgba(120,70,22,.28) 0, rgba(120,70,22,.1) 2px, transparent 4px),
+    radial-gradient(circle at 61% 9%, rgba(120,70,22,.3) 0, rgba(120,70,22,.1) 2px, transparent 5px),
+    radial-gradient(circle at 53% 55%, rgba(120,70,22,.2) 0, rgba(120,70,22,.08) 2px, transparent 4px),
+    radial-gradient(circle at 30% 24%, rgba(120,70,22,.22) 0, rgba(120,70,22,.08) 3px, transparent 5px),
+    var(--fiber),
+    var(--stain);
+  background-size:100% 100%,100% 100%,auto,auto,auto,auto,auto,auto,auto,auto,300px 300px,100% 100%;
+}
+.cf-clip{position:absolute;left:14px;top:-10px;width:22px;height:70px;z-index:5;filter:drop-shadow(1px 2px 1px rgba(0,0,0,.35))}
+
+/* ===== 탭 ===== */
+.cf-tabs{position:absolute;right:0;top:72px;z-index:1;display:flex;flex-direction:column;gap:8px}
+.cf-tab{
+  writing-mode:vertical-rl; width:38px; margin-left:-6px; padding:16px 8px 16px 12px;
+  font-family:'Special Elite',monospace; font-size:11px; letter-spacing:.18em; color:var(--ink);
+  background:var(--paper-dark); border:1px solid #8d7850; border-left:none; border-radius:0 9px 9px 0;
+  cursor:pointer; box-shadow:2px 2px 4px rgba(0,0,0,.25); transition:.2s;
+}
+.cf-tab:hover{background:#dfcc9f}
+.cf-tab.active{background:var(--paper);margin-left:-8px;width:42px;font-weight:bold;box-shadow:3px 2px 5px rgba(0,0,0,.3)}
+
+/* ===== 공통 ===== */
+.cf-head{display:flex;justify-content:space-between;align-items:baseline;font-family:'Special Elite',monospace;font-size:12px;letter-spacing:.14em;padding-bottom:9px;border-bottom:1px solid var(--line)}
+.cf-label{font-size:9.5px;letter-spacing:.2em;color:var(--ink-soft);text-transform:uppercase;font-family:'Special Elite',monospace}
+.cf-sec-title{display:flex;align-items:center;gap:10px;font-family:'Special Elite',monospace;font-size:10.5px;letter-spacing:.2em;color:var(--ink-soft);margin:18px 0 10px}
+.cf-sec-title::after{content:"";flex:1;border-top:1px solid var(--line)}
+.cf-page{display:none;animation:cf-fade .35s ease}
+.cf-page.active{display:block}
+@keyframes cf-fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.cf-wrap .ed{outline:none;min-width:12px}
+.cf-wrap.editing .ed:hover{background:rgba(163,50,42,.07);cursor:text}
+.cf-wrap.editing .ed:focus{background:rgba(255,250,230,.55);box-shadow:0 0 0 1px rgba(163,50,42,.45)}
+
+/* ===== SUMMARY ===== */
+.cf-name{font-family:'Special Elite',monospace;font-size:27px;letter-spacing:.06em;margin:18px 0 0;line-height:1.15}
+.cf-aka{font-size:13px;margin:4px 0 16px}
+.cf-profile{display:flex;gap:16px}
+.cf-photo{position:relative;flex:0 0 150px;height:158px;border:1px solid #6b5b45;background:#8f8678;overflow:hidden;box-shadow:inset 0 0 18px rgba(0,0,0,.35)}
+.cf-wrap.editing .cf-photo{cursor:pointer}
+.cf-photo svg.sil{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.cf-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:sepia(.55) contrast(1.05) grayscale(.3);z-index:2}
+.cf-photo img[hidden]{display:none}
+.cf-ruler{position:absolute;left:0;top:0;bottom:0;width:100%;pointer-events:none;z-index:1;display:flex;flex-direction:column;justify-content:space-between;padding:6px 0}
+.cf-ruler i{display:block;font-style:normal;font-size:9px;color:#2b2520;padding-left:5px;border-top:1px solid rgba(30,25,20,.45);line-height:1.1;font-family:'Courier Prime',monospace;position:relative}
+.cf-ruler i::after{content:"";position:absolute;left:24px;right:0;top:-1px;border-top:1px solid rgba(30,25,20,.18)}
+.cf-stamp{
+  position:absolute;left:-6px;bottom:-4px;right:-8px;transform:rotate(-5deg);text-align:center;
+  font-family:'Special Elite',monospace;font-size:17px;letter-spacing:.06em;color:var(--red);
+  border:3px solid var(--red);border-radius:3px;padding:3px 4px;opacity:.82;mix-blend-mode:multiply;
+  background:rgba(163,50,42,.04);text-shadow:0 0 1px var(--red);z-index:3
+}
+.cf-photo-wrap{position:relative;flex:0 0 150px}
+.cf-photo-wrap .cf-stamp{left:-6px;right:-8px;bottom:12px}
+.cf-info{flex:1;min-width:0}
+.cf-info .row{padding:0 0 7px;margin-bottom:8px;border-bottom:1px solid var(--line)}
+.cf-info .row:last-child{border:none}
+.cf-info .val{font-size:13px;font-weight:700}
+.cf-dots{display:flex;gap:5px;margin-top:6px}
+.cf-dot{width:13px;height:13px;border-radius:50%;border:1.5px solid var(--ink);background:transparent}
+.cf-dot.on{background:var(--ink)}
+.cf-wrap.editing .cf-dot{cursor:pointer}
+.cf-charges{font-size:13px;font-weight:700;line-height:1.55}
+.cf-status{margin-top:12px}
+.cf-status .val{font-size:13px;font-weight:700}
+.cf-redact{margin-top:14px;display:flex;flex-direction:column;gap:5px;max-width:78%}
+.cf-redact span{display:block;height:11px;background:#1c1815;border-radius:1px;transform:rotate(-.4deg)}
+.cf-redact span:nth-child(1){width:100%}.cf-redact span:nth-child(2){width:94%;transform:rotate(.3deg)}
+.cf-redact span:nth-child(3){width:70%}.cf-redact span:nth-child(4){width:82%;transform:rotate(-.2deg)}
+.cf-seal{position:absolute;right:6px;bottom:2px;width:104px;height:104px;transform:rotate(-8deg);mix-blend-mode:multiply;opacity:.85;pointer-events:none}
+.cf-summary-bottom{position:relative;min-height:120px}
+
+/* ===== 하단 ===== */
+.cf-foot{display:flex;justify-content:space-between;margin-top:20px;padding-top:10px;border-top:1px solid var(--line)}
+.cf-foot .val{font-size:12.5px;font-weight:700}
+.cf-foot .r{text-align:right}
+
+/* ===== CONTACTS ===== */
+.cf-list>li{position:relative;padding:10px 26px 10px 12px;margin-bottom:10px;border:1px solid var(--line);border-left:3px solid var(--ink);background:rgba(255,248,225,.28)}
+.cf-c-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cf-c-name{font-family:'Special Elite',monospace;font-size:15px;letter-spacing:.05em}
+.cf-c-tag{font-size:9.5px;letter-spacing:.14em;padding:1px 7px;border:1px solid var(--red);color:var(--red);transform:rotate(-1.5deg);font-family:'Special Elite',monospace}
+.cf-c-note{font-size:12px;margin-top:4px;color:#4d4035}
+
+/* ===== RECORDS ===== */
+.cf-tl{position:relative;margin-left:6px;padding-left:20px;border-left:1.5px dashed var(--ink)}
+.cf-tl>li{position:relative;padding:0 24px 18px 0}
+.cf-tl>li::before{content:"";position:absolute;left:-27px;top:5px;width:11px;height:11px;border-radius:50%;background:var(--paper);border:2px solid var(--ink)}
+.cf-r-date{font-family:'Special Elite',monospace;font-size:11.5px;letter-spacing:.14em;color:var(--red)}
+.cf-r-title{font-weight:700;font-size:13.5px;margin-top:1px}
+.cf-r-desc{font-size:12px;color:#4d4035;margin-top:2px}
+
+/* ===== 추가/삭제 ===== */
+.cf-del{display:none;position:absolute;right:4px;top:4px;width:20px;height:20px;line-height:17px;text-align:center;border:1px solid var(--red);border-radius:50%;background:transparent;color:var(--red);font-size:14px;cursor:pointer;padding:0}
+.cf-del:hover{background:var(--red);color:#fff}
+.cf-wrap.editing .cf-del{display:block}
+.cf-add{display:none;width:100%;margin-top:4px;padding:7px;font-family:'Special Elite',monospace;font-size:11px;letter-spacing:.15em;color:var(--ink);background:transparent;border:1px dashed var(--ink);cursor:pointer}
+.cf-add:hover{background:rgba(58,46,37,.08)}
+.cf-wrap.editing .cf-add{display:block}
+
+/* ===== 툴바 ===== */
+.cf-toolbar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.cf-toolbar button{font-family:'Special Elite',monospace;font-size:11px;letter-spacing:.1em;padding:7px 12px;color:var(--ink);background:var(--paper);border:1px solid #8d7850;border-radius:3px;cursor:pointer;box-shadow:1px 2px 3px rgba(0,0,0,.2)}
+.cf-toolbar button:hover{background:#efe0bd}
+.cf-hint{text-align:center;font-size:10.5px;color:#7a6a55;margin-top:8px}
+
+@media (max-width:420px){
+  .cf-card{padding:34px 16px 22px}
+  .cf-profile{flex-direction:column}
+  .cf-photo-wrap{flex-basis:auto;width:100%;max-width:170px}
+  .cf-name{font-size:23px}
+}
+</style>
+
+<div class="cf-wrap editing" id="cf">
+  <div class="cf-stage">
+  <div class="cf-back b2"></div>
+  <div class="cf-back b1"></div>
+
+  <div class="cf-tabs">
+    <button class="cf-tab active" data-go="summary" type="button">SUMMARY</button>
+    <button class="cf-tab" data-go="contacts" type="button">CONTACTS</button>
+    <button class="cf-tab" data-go="records" type="button">RECORDS</button>
+  </div>
+
+  <div class="cf-card">
+    <svg class="cf-clip" viewBox="0 0 22 70" fill="none" stroke="#9a9a96" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 20 V54 a5 5 0 0 0 10 0 V12 a8 8 0 0 0 -16 0 V50"/>
+    </svg>
+
+    <div class="cf-body">
+      <div class="cf-head">
+        <span class="ed one">CASE FILE</span>
+        <span class="ed one">No. 7A-19-88</span>
+      </div>
+
+      <!-- ================= SUMMARY ================= -->
+      <section class="cf-page active" data-page="summary">
+        <h2 class="cf-name ed one">SALVATORE RUSSO</h2>
+        <div class="cf-aka"><span class="ed one">aka “Il Toro”</span></div>
+
+        <div class="cf-profile">
+          <div class="cf-photo-wrap">
+            <div class="cf-photo" title="편집 모드에서 클릭하면 사진 교체">
+              <svg class="sil" viewBox="0 0 150 158" preserveAspectRatio="xMidYMid slice">
+                <defs><linearGradient id="cf-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a39a8b"/><stop offset="1" stop-color="#7c7468"/></linearGradient></defs>
+                <rect width="150" height="158" fill="url(#cf-g)"/>
+                <ellipse cx="80" cy="62" rx="26" ry="31" fill="#171412"/>
+                <path d="M20 158 C22 118 50 104 80 104 C110 104 138 118 142 158 Z" fill="#171412"/>
+              </svg>
+              <img class="cf-img" alt="" hidden>
+              <div class="cf-ruler"><i>190</i><i>180</i><i>170</i><i>160</i><i>150</i></div>
+            </div>
+            <div class="cf-stamp ed one">CONFIDENTIAL</div>
+          </div>
+
+          <div class="cf-info">
+            <div class="row"><div class="cf-label">Role</div><div class="val ed one">Mafia Boss</div></div>
+            <div class="row"><div class="cf-label">Faction</div><div class="val ed one">Russo Family</div></div>
+            <div class="row"><div class="cf-label">Rank</div><div class="val ed one">Don</div></div>
+            <div class="row"><div class="cf-label">Loyalty</div>
+              <div class="cf-dots">
+                <span class="cf-dot on"></span><span class="cf-dot on"></span><span class="cf-dot on"></span><span class="cf-dot on"></span><span class="cf-dot on"></span><span class="cf-dot"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cf-sec-title">CASE DETAILS</div>
+        <div class="cf-label">Charges</div>
+        <div class="cf-charges ed">Extortion, Money Laundering,<br>Illegal Gambling, Bribery</div>
+        <div class="cf-status">
+          <div class="cf-label">Status</div>
+          <div class="val ed one">Under Investigation</div>
+        </div>
+
+        <div class="cf-summary-bottom">
+          <div class="cf-redact"><span></span><span></span><span></span><span></span></div>
+          <svg class="cf-seal" viewBox="0 0 120 120" fill="none" stroke="#a3322a">
+            <defs><path id="cf-arc" d="M60,60 m-43,0 a43,43 0 1,1 86,0 a43,43 0 1,1 -86,0"/></defs>
+            <circle cx="60" cy="60" r="57" stroke-width="2.5"/>
+            <circle cx="60" cy="60" r="52" stroke-width="1"/>
+            <circle cx="60" cy="60" r="30" stroke-width="1.5"/>
+            <text font-family="Special Elite, monospace" font-size="8.5" letter-spacing="1.6" fill="#a3322a" stroke="none"><textPath href="#cf-arc">DEPARTMENT OF INVESTIGATION · OFFICIAL SEAL · CLASSIFIED ·</textPath></text>
+            <path d="M60 38 L78 45 V62 C78 74 69 81 60 85 C51 81 42 74 42 62 V45 Z" stroke-width="2"/>
+            <path d="M60 50 l3.5 7.5 8 1 -6 5.5 1.7 8 -7.2 -4 -7.2 4 1.7 -8 -6 -5.5 8 -1 Z" stroke-width="1.2" fill="rgba(163,50,42,.25)"/>
+          </svg>
+        </div>
+      </section>
+
+      <!-- ================= CONTACTS ================= -->
+      <section class="cf-page" data-page="contacts">
+        <div class="cf-sec-title">KNOWN ASSOCIATES</div>
+        <ul class="cf-list" id="cf-contacts">
+          <li class="cf-item">
+            <div class="cf-c-top"><span class="cf-c-name ed one">Vincent Marlowe</span><span class="cf-c-tag ed one">CONSIGLIERE</span></div>
+            <div class="cf-c-note ed">오랜 심복. 가문의 장부와 비밀을 가장 많이 알고 있음.</div>
+            <button class="cf-del" type="button" title="삭제">×</button>
+          </li>
+          <li class="cf-item">
+            <div class="cf-c-top"><span class="cf-c-name ed one">Elena Russo</span><span class="cf-c-tag ed one">FAMILY</span></div>
+            <div class="cf-c-note ed">여동생. 합법 사업체 운영을 담당.</div>
+            <button class="cf-del" type="button" title="삭제">×</button>
+          </li>
+          <li class="cf-item">
+            <div class="cf-c-top"><span class="cf-c-name ed one">Marco “Fox” Bellini</span><span class="cf-c-tag ed one">RIVAL</span></div>
+            <div class="cf-c-note ed">서부 항구 구역을 두고 대립 중인 경쟁 조직의 보스.</div>
+            <button class="cf-del" type="button" title="삭제">×</button>
+          </li>
+        </ul>
+        <button class="cf-add" type="button" data-list="cf-contacts" data-tpl="contact">+ ADD CONTACT</button>
+      </section>
+
+      <!-- ================= RECORDS ================= -->
+      <section class="cf-page" data-page="records">
+        <div class="cf-sec-title">TIMELINE</div>
+        <ul class="cf-tl" id="cf-records">
+          <li class="cf-item">
+            <div class="cf-r-date ed one">1988.03</div>
+            <div class="cf-r-title ed one">가문의 후계자로 지명</div>
+            <div class="cf-r-desc ed">선대 보스의 죽음 이후 조직을 물려받음.</div>
+            <button class="cf-del" type="button" title="삭제">×</button>
+          </li>
+          <li class="cf-item">
+            <div class="cf-r-date ed one">2005.11</div>
+            <div class="cf-r-title ed one">항구 도박장 장악</div>
+            <div class="cf-r-desc ed">첫 번째 수사 대상에 오름. 증거 불충분으로 불기소.</div>
+            <button class="cf-del" type="button" title="삭제">×</button>
+          </li>
+          <li class="cf-item">
+            <div class="cf-r-date ed one">2018.12</div>
+            <div class="cf-r-title ed one">공식 수사 개시</div>
+            <div class="cf-r-desc ed">담당 수사관 J. Morgan 배정. 현재 진행 중.</div>
+            <button class="cf-del" type="button" title="삭제">×</button>
+          </li>
+        </ul>
+        <button class="cf-add" type="button" data-list="cf-records" data-tpl="record">+ ADD RECORD</button>
+      </section>
+
+      <div class="cf-foot">
+        <div><div class="cf-label">Filed</div><div class="val ed one">12 / 04 / 2018</div></div>
+        <div class="r"><div class="cf-label">Agent</div><div class="val ed one">J. Morgan</div></div>
+      </div>
+    </div>
+  </div>
+  </div><!-- /cf-stage -->
+
+  <div class="cf-toolbar" data-ui>
+    <button type="button" id="cf-toggle">편집 모드 : ON</button>
+    <button type="button" id="cf-export">HTML 저장</button>
+    <button type="button" id="cf-reset">초기화</button>
+  </div>
+  <div class="cf-hint" data-ui>글자를 클릭하면 수정 · 사진 클릭 시 교체 · 로열티 점 클릭 시 토글</div>
+  <input type="file" id="cf-file" accept="image/*" hidden>
+</div>
+
+<script>
+(function(){
+  /* ▼ false 로 바꾸면 툴바·편집 기능이 사라지는 읽기 전용(공개용)이 됩니다 */
+  var EDIT_UI = true;
+
+  var root = document.getElementById('cf');
+  var body = root.querySelector('.cf-body');
+  var KEY = 'cf-save-' + location.pathname;
+  var editing = EDIT_UI;
+  var timer;
+
+  var TPL = {
+    contact:'<li class="cf-item"><div class="cf-c-top"><span class="cf-c-name ed one">New Contact</span><span class="cf-c-tag ed one">TAG</span></div><div class="cf-c-note ed">메모를 입력하세요.</div><button class="cf-del" type="button" title="삭제">×</button></li>',
+    record :'<li class="cf-item"><div class="cf-r-date ed one">YYYY.MM</div><div class="cf-r-title ed one">제목</div><div class="cf-r-desc ed">내용을 입력하세요.</div><button class="cf-del" type="button" title="삭제">×</button></li>'
+  };
+
+  function setEdit(on){
+    editing = on;
+    root.classList.toggle('editing', on);
+    root.querySelectorAll('.ed').forEach(function(el){ el.setAttribute('contenteditable', on ? 'true' : 'false'); });
+    document.getElementById('cf-toggle').textContent = '편집 모드 : ' + (on ? 'ON' : 'OFF');
+  }
+
+  function show(name){
+    root.querySelectorAll('.cf-tab').forEach(function(t){ t.classList.toggle('active', t.dataset.go === name); });
+    root.querySelectorAll('.cf-page').forEach(function(p){ p.classList.toggle('active', p.dataset.page === name); });
+  }
+
+  function save(){
+    if(!EDIT_UI) return;
+    clearTimeout(timer);
+    timer = setTimeout(function(){
+      try{ localStorage.setItem(KEY, body.innerHTML); }catch(e){}
+    }, 400);
+  }
+
+  /* 저장된 내용 복원 (편집용일 때만) */
+  if(EDIT_UI){
+    try{
+      var saved = localStorage.getItem(KEY);
+      if(saved) body.innerHTML = saved;
+    }catch(e){}
+  } else {
+    root.querySelectorAll('[data-ui]').forEach(function(el){ el.style.display = 'none'; });
+  }
+  setEdit(EDIT_UI);
+  show('summary');
+
+  /* 클릭 처리 */
+  root.addEventListener('click', function(e){
+    var t = e.target;
+    var tab = t.closest('.cf-tab');
+    if(tab){ show(tab.dataset.go); return; }
+    if(!editing) return;
+
+    var add = t.closest('.cf-add');
+    if(add){
+      document.getElementById(add.dataset.list).insertAdjacentHTML('beforeend', TPL[add.dataset.tpl]);
+      setEdit(true); save(); return;
+    }
+    var del = t.closest('.cf-del');
+    if(del){ del.closest('.cf-item').remove(); save(); return; }
+    var dot = t.closest('.cf-dot');
+    if(dot){ dot.classList.toggle('on'); save(); return; }
+    if(t.closest('.cf-photo')){ document.getElementById('cf-file').click(); }
+  });
+
+  /* 한 줄 필드는 Enter 막기 */
+  root.addEventListener('keydown', function(e){
+    if(e.key === 'Enter' && e.target.classList && e.target.classList.contains('one')){ e.preventDefault(); e.target.blur(); }
+  });
+  /* 붙여넣기는 순수 텍스트로 */
+  root.addEventListener('paste', function(e){
+    if(e.target.closest && e.target.closest('.ed')){
+      e.preventDefault();
+      var txt = (e.clipboardData || window.clipboardData).getData('text/plain');
+      document.execCommand('insertText', false, txt);
+    }
+  });
+  root.addEventListener('input', save);
+
+  /* 사진 교체 (저장 용량을 위해 축소) */
+  document.getElementById('cf-file').addEventListener('change', function(){
+    var f = this.files[0]; if(!f) return;
+    var reader = new FileReader();
+    reader.onload = function(){
+      var img = new Image();
+      img.onload = function(){
+        var max = 500, s = Math.min(1, max / Math.max(img.width, img.height));
+        var c = document.createElement('canvas');
+        c.width = img.width * s; c.height = img.height * s;
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        var el = root.querySelector('.cf-img');
+        el.src = c.toDataURL('image/jpeg', .85);
+        el.hidden = false;
+        save();
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(f);
+    this.value = '';
+  });
+
+  document.getElementById('cf-toggle').addEventListener('click', function(){ setEdit(!editing); });
+
+  document.getElementById('cf-reset').addEventListener('click', function(){
+    if(confirm('저장된 수정 내용을 지우고 처음 상태로 되돌릴까요?')){
+      try{ localStorage.removeItem(KEY); }catch(e){}
+      location.reload();
+    }
+  });
+
+  /* 현재 상태를 HTML 파일로 내려받기 → GitHub에 덮어쓰기 */
+  document.getElementById('cf-export').addEventListener('click', function(){
+    var clone = document.documentElement.cloneNode(true);
+    clone.querySelectorAll('[contenteditable]').forEach(function(el){ el.removeAttribute('contenteditable'); });
+    var r = clone.querySelector('#cf');
+    r.classList.add('editing');
+    clone.querySelectorAll('.cf-tab').forEach(function(t){ t.classList.toggle('active', t.dataset.go === 'summary'); });
+    clone.querySelectorAll('.cf-page').forEach(function(p){ p.classList.toggle('active', p.dataset.page === 'summary'); });
+    var blob = new Blob(['<!DOCTYPE html>\n' + clone.outerHTML], {type:'text/html'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'case-file.html';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+  });
+})();
+</script>
+</body>
+</html>
